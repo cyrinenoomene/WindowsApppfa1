@@ -6,41 +6,46 @@ Public Class Form1
 
 	End Sub
 
-	'login****'
+	'login'
 
 
 	Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 		Dim con As New SqlConnection
 		Dim cmd As New SqlCommand
+
 		Dim Password As String
-		Dim Password2 As String
+
 		Dim userName As String
 		Try
 
 			con.ConnectionString = "server=DESKTOP-9CS4D7I;Database=Authentification;Integrated Security=True "
 			con.Open()
+
 			cmd.Connection = con
 			cmd.CommandText = " SELECT  UserName, Password FROM dbo.LOGIN WHERE UserName='user' and Password='123'"
 			Dim rd As SqlDataReader = cmd.ExecuteReader()
 			If rd.HasRows Then
-				While rd.Read()
-					Password = rd("Password").ToString()
-					userName = rd("UserName").ToString()
-					Password2 = txtPassword.Text()
-
-					If Password = Password2 And userName = TxtUsername.Text Then
-
-						MessageBox.Show("Logged in successfully as " & userName, "", MessageBoxButtons.OK, MessageBoxIcon.Information
-									)
-						frmMain.Show()
-						Me.Hide()
-						TxtPassword.Text = ""
-						TxtUsername.Text = ""
-
-					End If
+				rd.Read()
+				Password = rd("Password").ToString()
+				userName = rd("UserName").ToString()
 
 
-				End While
+
+
+
+				If String.Compare(Password, TxtPassword.Text.ToString()) = 1 And String.Compare(userName, TxtUsername.Text.ToString()) = 1 Then
+
+					MessageBox.Show("Logged in successfully as " & userName, "", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+					frmMain.Show()
+					Me.Hide()
+					TxtPassword.Text = ""
+					TxtUsername.Text = ""
+
+				End If
+
+
+
 			Else
 				MessageBox.Show("Username and Password do not match..", "Authentication Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
 
